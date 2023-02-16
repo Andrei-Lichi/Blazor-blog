@@ -1,0 +1,30 @@
+@page "/posts/{url}"
+@using BlazorBlog.Shared.Models
+@using BlazorBlog.Presentation.Services
+@inject IBlogService _blogService
+
+@if (currentPost == null)
+{
+    <span>Getting the blog post...</span>
+}
+else
+{
+    <img src="@currentPost.Image">
+    <h3>@currentPost.Title</h3>
+    @((MarkupString)currentPost.Content)
+                          
+}
+
+
+@code {
+    private BlogPost? currentPost;
+
+    [Parameter]
+    public String Url { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentPost = await _blogService.GetBlogPostByUrlAsync(Url);
+    }
+
+}
